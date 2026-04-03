@@ -1,5 +1,9 @@
 a homage to the bloomberg terminal, written in python/fastapi with a flutter dart frontend. works on web, linux, ios, windows and android.
 
+data derived from yfinance and google RSS feeds.
+
+a non-commercial, non-deployed product, the content here is protected under fair use for research and educational use. all credits go to Yahoo Finance and Google / its partners.
+
 <img width="1920" height="1200" alt="Screenshot from 2026-04-03 01-49-22" src="https://github.com/user-attachments/assets/002495ee-b03c-46e1-8dd0-1223305906a2" />
 
 <img width="1920" height="1200" alt="Screenshot from 2026-04-03 01-50-26" src="https://github.com/user-attachments/assets/7270825e-b1fc-486a-ba16-585dfdead06a" />

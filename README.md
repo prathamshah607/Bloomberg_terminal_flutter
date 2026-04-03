@@ -1,5 +1,7 @@
 a homage to the bloomberg terminal, written in python/fastapi with a flutter dart frontend. works on web, linux, ios, windows and android.
 
+this product acts as a one-stop source of truth for the entire securities market, including currencies, indices, companies and commodities. it allows users to make mock trades without any monetary risk and test their skills on a live shadow of the real market.
+
 data derived from yfinance and google RSS feeds.
 
 a non-commercial, non-deployed product, the content here is protected under fair use for research and educational use. all credits go to Yahoo Finance and Google / its partners.

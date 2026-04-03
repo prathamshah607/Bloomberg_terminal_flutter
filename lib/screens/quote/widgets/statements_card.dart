@@ -125,6 +125,6 @@ class StatementsCard extends ConsumerWidget {
       formatted = val.toStringAsFixed(0);
     }
     
-    return isNegative ? "(\$$formatted)" : "\$$formatted";
+    return isNegative ? "(₹$formatted)" : "₹$formatted";
   }
 }

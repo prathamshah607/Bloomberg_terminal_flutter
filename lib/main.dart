@@ -24,7 +24,6 @@ class StockSimApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Eagerly watch settings so they are loaded and applied to the Formatter.
     ref.watch(settingsProvider);
 
     return MaterialApp(

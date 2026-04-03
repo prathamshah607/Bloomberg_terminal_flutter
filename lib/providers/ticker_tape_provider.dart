@@ -14,8 +14,8 @@ final asyncTickerTapeProvider = FutureProvider<List<StockQuote>>((ref) async {
     '^GSPC',
     '^IXIC',
     '^DJI',
-    'BTC-USD',
-    'ETH-USD',
+    'BTC-INR',
+    'ETH-INR',
     'GC=F',
     'CL=F'
   ];

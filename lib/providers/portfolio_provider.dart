@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 
 class TradeRecord {
   final String symbol;
@@ -14,6 +18,24 @@ class TradeRecord {
     required this.price,
     required this.timestamp,
   });
+
+  Map<String, dynamic> toJson() => {
+        'symbol': symbol,
+        'isBuy': isBuy,
+        'quantity': quantity,
+        'price': price,
+        'timestamp': timestamp.toIso8601String(),
+      };
+
+  factory TradeRecord.fromJson(Map<String, dynamic> json) {
+    return TradeRecord(
+      symbol: json['symbol'],
+      isBuy: json['isBuy'],
+      quantity: json['quantity'],
+      price: json['price'],
+      timestamp: DateTime.parse(json['timestamp']),
+    );
+  }
 }
 
 class PortfolioState {
@@ -42,17 +64,82 @@ class PortfolioState {
       tradeHistory: tradeHistory ?? this.tradeHistory,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'cashBalance': cashBalance,
+        'holdings': holdings,
+        'averageCosts': averageCosts,
+        'tradeHistory': tradeHistory.map((t) => t.toJson()).toList(),
+      };
+
+  factory PortfolioState.fromJson(Map<String, dynamic> json) {
+    return PortfolioState(
+      cashBalance: (json['cashBalance'] as num).toDouble(),
+      holdings: Map<String, int>.from(json['holdings'] ?? {}),
+      averageCosts: (json['averageCosts'] as Map<String, dynamic>?)?.map(
+            (k, v) => MapEntry(k, (v as num).toDouble()),
+          ) ??
+          {},
+      tradeHistory: (json['tradeHistory'] as List<dynamic>?)
+              ?.map((t) => TradeRecord.fromJson(t))
+              .toList() ??
+          [],
+    );
+  }
 }
 
 class PortfolioNotifier extends StateNotifier<PortfolioState> {
+  Timer? _saveTimer;
+  File? _portfolioFile;
+
   PortfolioNotifier()
       : super(PortfolioState(
-          cashBalance: 100000.0, // \$100k starting virtual cash
+          cashBalance: 100000.0, // ₹100k starting virtual cash
           holdings: {},
           averageCosts: {},
           tradeHistory: [],
         )) {
-    // In the future, we load this from shared_preferences or a local DB
+    _initStorage();
+  }
+
+  Future<void> _initStorage() async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      _portfolioFile = File('${directory.path}/portfolio.json');
+
+      if (await _portfolioFile!.exists()) {
+        final content = await _portfolioFile!.readAsString();
+        if (content.isNotEmpty) {
+          final json = jsonDecode(content);
+          state = PortfolioState.fromJson(json);
+        }
+      }
+    } catch (e) {
+      print('Error loading portfolio: $e');
+    }
+
+    // Set up periodic saving (e.g., every 5 minutes)
+    _saveTimer = Timer.periodic(const Duration(minutes: 5), (_) {
+      _savePortfolio();
+    });
+  }
+
+  Future<void> _savePortfolio() async {
+    if (_portfolioFile == null) return;
+    try {
+      final json = jsonEncode(state.toJson());
+      await _portfolioFile!.writeAsString(json);
+    } catch (e) {
+      print('Error saving portfolio: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _saveTimer?.cancel();
+    // Final save on shutdown/disposal if called
+    _savePortfolio();
+    super.dispose();
   }
 
   void buyStock(String symbol, int quantity, double price) {
@@ -77,8 +164,20 @@ class PortfolioNotifier extends StateNotifier<PortfolioState> {
         cashBalance: state.cashBalance - cost,
         holdings: newHoldings,
         averageCosts: newAvgCosts,
-        tradeHistory: [...state.tradeHistory, TradeRecord(symbol: symbol, isBuy: true, quantity: quantity, price: price, timestamp: DateTime.now())],
+        tradeHistory: [
+          ...state.tradeHistory,
+          TradeRecord(
+            symbol: symbol,
+            isBuy: true,
+            quantity: quantity,
+            price: price,
+            timestamp: DateTime.now(),
+          )
+        ],
       );
+      
+      // Save after trade
+      _savePortfolio();
     } else {
       throw Exception('Insufficient funds');
     }
@@ -102,8 +201,20 @@ class PortfolioNotifier extends StateNotifier<PortfolioState> {
         cashBalance: state.cashBalance + revenue,
         holdings: newHoldings,
         averageCosts: newAvgCosts,
-        tradeHistory: [...state.tradeHistory, TradeRecord(symbol: symbol, isBuy: true, quantity: quantity, price: price, timestamp: DateTime.now())],
+        tradeHistory: [
+          ...state.tradeHistory,
+          TradeRecord(
+            symbol: symbol,
+            isBuy: false,
+            quantity: quantity,
+            price: price,
+            timestamp: DateTime.now(),
+          )
+        ],
       );
+      
+      // Save after trade
+      _savePortfolio();
     } else {
       throw Exception('Insufficient shares to sell');
     }

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 import yfinance as yf
 import pandas as pd
+from utils import get_exchange_rate, convert_info_dict
 
 router = APIRouter()
 
@@ -15,7 +16,7 @@ def clean_financials(df: pd.DataFrame) -> dict:
     return df.to_dict(orient="index")
 
 @router.get("/info/{symbol}")
-def get_info(symbol: str):
+def get_info(symbol: str, currency: str = "INR"):
     """
     Returns the comprehensive dictionary of all stats, metrics, and details
     provided by yfinance for the requested asset.
@@ -25,46 +26,11 @@ def get_info(symbol: str):
         info = ticker.info
         if not info or len(info.keys()) == 0:
             raise HTTPException(status_code=404, detail="No info found for symbol")
+            
+        base_currency = info.get('currency', 'USD')
+        rate = get_exchange_rate(base_currency, currency)
+        info = convert_info_dict(info, rate, currency)
+        
         return {"symbol": symbol.upper(), "info": info}
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
-
-# @router.get("/financials/{symbol}")
-# def get_financials(symbol: str):
-    """
-    Returns income statement (P&L), balance sheet, and cashflow.
-    These are typically only available for equities, not crypto/ETFs.
-    """
-    try:
-        ticker = yf.Ticker(symbol)
-        
-        income = {}
-        balance = {}
-        cashflow = {}
-        
-        try:
-            if hasattr(ticker, "income_stmt") and not ticker.income_stmt.empty:
-                income = clean_financials(ticker.income_stmt)
-        except Exception:
-            pass
-            
-        try:
-            if hasattr(ticker, "balance_sheet") and not ticker.balance_sheet.empty:
-                balance = clean_financials(ticker.balance_sheet)
-        except Exception:
-            pass
-            
-        try:
-            if hasattr(ticker, "cashflow") and not ticker.cashflow.empty:
-                cashflow = clean_financials(ticker.cashflow)
-        except Exception:
-            pass
-
-        return {
-            "symbol": symbol.upper(),
-            "income_statement": income,
-            "balance_sheet": balance,
-            "cash_flow": cashflow
-        }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))

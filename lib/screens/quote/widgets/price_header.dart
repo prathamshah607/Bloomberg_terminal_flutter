@@ -29,7 +29,7 @@ class PriceHeader extends ConsumerWidget {
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text(
-                    '\$${quote.price.toStringAsFixed(2)}',
+                    '₹${quote.price.toStringAsFixed(2)}',
                     style: TextStyles.terminalBody.copyWith(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ class PriceHeader extends ConsumerWidget {
                 children: [
                   Text('VOL: ${Formatter.formatVolume(quote.volume)}', style: TextStyles.terminalBodySmall.copyWith(color: AppColors.secondaryText)),
                   const SizedBox(width: 16),
-                  Text('PREV CLOSE: \$${quote.previousClose.toStringAsFixed(2)}', style: TextStyles.terminalBodySmall.copyWith(color: AppColors.secondaryText)),
+                  Text('PREV CLOSE: ₹${quote.previousClose.toStringAsFixed(2)}', style: TextStyles.terminalBodySmall.copyWith(color: AppColors.secondaryText)),
                 ],
               ),
             ],

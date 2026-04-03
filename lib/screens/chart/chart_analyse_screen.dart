@@ -91,8 +91,8 @@ class ChartAnalyseScreen extends ConsumerWidget {
                 ]),
                 const SizedBox(height: 24),
                 _buildStatCards('VOLUME & TRADING', [
-                  _StatItem('AVERAGE VOL', Formatter.formatCompactCurrency(avgVolume).replaceAll('\$', '')),
-                  _StatItem('TOTAL VOL', Formatter.formatCompactCurrency(sumVolume).replaceAll('\$', '')),
+                  _StatItem('AVERAGE VOL', Formatter.formatCompactCurrency(avgVolume).replaceAll('₹', '')),
+                  _StatItem('TOTAL VOL', Formatter.formatCompactCurrency(sumVolume).replaceAll('₹', '')),
                   _StatItem('DATA POINTS', '${candles.length} Candles'),
                 ]),
               ],

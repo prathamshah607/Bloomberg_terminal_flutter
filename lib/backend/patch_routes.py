@@ -1,4 +1,9 @@
-from fastapi import APIRouter, HTTPException
+import os 
+from pathlib import Path
+routes_dir = Path("routes")
+
+# Patch history.py
+history_py = """from fastapi import APIRouter, HTTPException
 import yfinance as yf
 from utils import get_exchange_rate, convert_tz
 
@@ -33,3 +38,5 @@ def get_history(symbol: str, period: str = "1mo", interval: str = "1d", currency
         return {"symbol": symbol.upper(), "data": records, "currency": currency.upper(), "timezone": timezone}
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
+"""
+with open(routes_dir / "history.py", "w") as f: f.write(history_py)

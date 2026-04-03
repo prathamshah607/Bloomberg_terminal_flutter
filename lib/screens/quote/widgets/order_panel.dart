@@ -91,7 +91,7 @@ class _OrderPanelState extends ConsumerState<OrderPanel> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Cash: \$${portfolio.cashBalance.toStringAsFixed(2)}', style: TextStyles.terminalBodySmall.copyWith(color: AppColors.secondaryText)),
+                    Text('Cash: ₹${portfolio.cashBalance.toStringAsFixed(2)}', style: TextStyles.terminalBodySmall.copyWith(color: AppColors.secondaryText)),
                     Text('Pos: ${holding ?? 0} sh', style: TextStyles.terminalBodySmall.copyWith(color: AppColors.secondaryText)),
                   ],
                 ),
@@ -120,7 +120,7 @@ class _OrderPanelState extends ConsumerState<OrderPanel> {
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                 ),
-                child: Text('SUBMIT: \$${estimatedCost.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                child: Text('SUBMIT: ₹${estimatedCost.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           );

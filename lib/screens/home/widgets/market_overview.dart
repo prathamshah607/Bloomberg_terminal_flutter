@@ -37,7 +37,7 @@ class _MarketOverviewPanelState extends ConsumerState<MarketOverviewPanel> {
             child: TabBarView(
               children: [
                 _MiniChartGrid(symbols: ['^GSPC', '^IXIC', '^DJI', '^RUT', '^VIX', '^FTSE']),
-                _MiniChartGrid(symbols: ['EURUSD=X', 'GBPUSD=X', 'JPY=X', 'CAD=X', 'AUDUSD=X', 'EURGBP=X']),
+                _MiniChartGrid(symbols: ['USDINR=X', 'EURINR=X', 'GBPINR=X', 'JPYINR=X', 'AUDINR=X', 'SGDINR=X']),
                 _PortfolioGrid(),
               ],
             ),

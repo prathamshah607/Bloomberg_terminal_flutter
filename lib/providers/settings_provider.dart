@@ -11,7 +11,7 @@ class AppSettings {
   final int updateFrequencySeconds;
 
   const AppSettings({
-    this.currency = 'USD',
+    this.currency = 'INR',
     this.updateFrequencySeconds = 15,
   });
 
@@ -34,7 +34,7 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
   }
 
   void _loadSettings() {
-    final currency = prefs.getString('setting_currency') ?? 'USD';
+    final currency = prefs.getString('setting_currency') ?? 'INR';
     final freq = prefs.getInt('setting_update_frequency') ?? 15;
     state = AppSettings(currency: currency, updateFrequencySeconds: freq);
     Formatter.updateCurrency(currency);

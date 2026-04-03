@@ -135,20 +135,20 @@ class FundamentalsCard extends ConsumerWidget {
   String _formatCurrency(dynamic value) {
     if (value == null) return 'N/A';
     num val = value is num ? value : num.tryParse(value.toString()) ?? 0;
-    return '\$${val.toStringAsFixed(2)}';
+    return '₹${val.toStringAsFixed(2)}';
   }
 
   String _formatCompact(dynamic value) {
     if (value == null) return 'N/A';
     num val = value is num ? value : num.tryParse(value.toString()) ?? 0;
     if (val >= 1000000000000) {
-      return '\$${(val / 1000000000000).toStringAsFixed(2)}T';
+      return '₹${(val / 1000000000000).toStringAsFixed(2)}T';
     } else if (val >= 1000000000) {
-      return '\$${(val / 1000000000).toStringAsFixed(2)}B';
+      return '₹${(val / 1000000000).toStringAsFixed(2)}B';
     } else if (val >= 1000000) {
-      return '\$${(val / 1000000).toStringAsFixed(2)}M';
+      return '₹${(val / 1000000).toStringAsFixed(2)}M';
     }
-    return '\$${val.toStringAsFixed(0)}';
+    return '₹${val.toStringAsFixed(0)}';
   }
 
   String _formatPercent(dynamic value) {

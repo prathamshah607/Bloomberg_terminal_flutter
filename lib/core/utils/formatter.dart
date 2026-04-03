@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
 
 class Formatter {
-  static NumberFormat _currencyFormat = NumberFormat.simpleCurrency(name: 'USD');
-  static NumberFormat _compactCurrency = NumberFormat.compactSimpleCurrency(name: 'USD');
+  static NumberFormat _currencyFormat = NumberFormat.simpleCurrency(name: 'INR');
+  static NumberFormat _compactCurrency = NumberFormat.compactSimpleCurrency(name: 'INR');
   static final NumberFormat _percentFormat = NumberFormat.decimalPattern()..maximumFractionDigits = 2..minimumFractionDigits = 2;
 
   static void updateCurrency(String currencyName) {

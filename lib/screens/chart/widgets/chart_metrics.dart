@@ -35,7 +35,7 @@ class ChartMetrics extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '\$$current',
+                  '₹$current',
                   style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -64,8 +64,8 @@ class ChartMetrics extends ConsumerWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                _buildMetric('High', '\$${candles.map((e) => e.high).reduce((a, b) => a > b ? a : b).toStringAsFixed(2)}'),
-                _buildMetric('Low', '\$${candles.map((e) => e.low).reduce((a, b) => a < b ? a : b).toStringAsFixed(2)}'),
+                _buildMetric('High', '₹${candles.map((e) => e.high).reduce((a, b) => a > b ? a : b).toStringAsFixed(2)}'),
+                _buildMetric('Low', '₹${candles.map((e) => e.low).reduce((a, b) => a < b ? a : b).toStringAsFixed(2)}'),
                 _buildMetric('Vol', _formatVolume(candles.map((e) => e.volume).reduce((a, b) => a + b).toInt())),
               ],
             ),
